@@ -1,0 +1,63 @@
+<script type="text/javascript">
+    RED.nodes.registerType('queue', {
+        category: 'function',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: "" },
+            concurrent: { value: 1, validate: RED.validators.number() },
+            filo: { value: false },
+            retry: { value: { max: 0, delay: 0 }, required: false, type: "retry-config" }
+        },
+        oneditprepare: function () {
+            $("#node-input-concurrent").typedInput({
+                type: "num",
+                types: ["num"],
+                typeField: "#node-config-input-concurrent-type"
+            });
+            $("#node-input-filo").typedInput({
+                type: "bool",
+                types: ["bool"],
+                typeField: "#node-config-input-filo-type"
+            })
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "queue.svg",
+        label: function () {
+            return this.name || "Better Queue";
+        }
+    });
+
+</script>
+
+<script type="text/html" data-template-name="queue">
+    <div class="form-row">
+        <label for="node-input-concurrent"><i class="fa fa-tag"></i> Concurrent</label>
+        <input type="text" id="node-input-concurrent" placeholder="Concurrent">
+        <input type="hidden" id="node-input-concurrent-type">
+
+    </div>
+    <div class="form-row">
+        <label for="node-input-filo"><i class="fa fa-tag"></i> FILO</label>
+        <input type="text" id="node-input-filo" placeholder="FILO">
+        <input type="hidden" id="node-input-filo-type">
+    </div>
+    <div class="form-row">
+        <label for="node-input-retry"><i class="fa fa-tag"></i> Retry</label>
+        <input type="text" id="node-input-retry" placeholder="Retry">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="queue">
+    <p>Receive multiple msg asynchronously and dispatch it as a queue using <a href="https://www.npmjs.com/package/better-queue#queuing">better-queue</a>.<br> The tasks added to queue must persis deployments and server restarts. </p>
+    <br>
+    <p>For mark a task queued as completed use msg.resolve or msg.reject</p>
+
+    <h3>Outputs</h3>
+	<p>Each task added to queue, the <code>msg.payload</code> is dispatched using the options setted to queued. Additionally has a <code>msg.resolve</code> for mark queue task as finished and <code>msg.reject</code> to mark as error</p>
+	
+
+
+	<h3>Inputs</h3>
+	<h4>Any msg with serializable payload</h4>
+</script>
